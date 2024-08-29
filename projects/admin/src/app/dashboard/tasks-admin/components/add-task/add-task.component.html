@@ -1,32 +1,37 @@
 <div class="p-4">
     <header class="d-flex justify-content-between align-items-center" >
         <h1 class="m-0">Add New Task</h1>
-        <button mat-flat-button matDialogClose class="text-danger">
+        <button mat-flat-button (click)="close()" class="text-danger">
           <mat-icon>close</mat-icon>
         </button>
       </header>
-    <form >
+    <form [formGroup]="newTaskForm">
         <div class="row mt-3">
                 <div class="col-md-12">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Title</mat-label>
-                        <input matInput   placeholder="title">
+                        <input matInput formControlName="title" placeholder="title">
                     </mat-form-field>
                 </div>  
                 <div class="col-md-12">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>User</mat-label>
-                        <mat-select >
+                        <mat-select  formControlName="userId">
                             <mat-option *ngFor="let user of users" [value]="user?.id">
                               {{user?.name}}
                             </mat-option>
                           </mat-select>
                     </mat-form-field>
                 </div> 
+                <div class="col-md-12 my-3">
+                    <label for="selectFile" class="btn btn-primary">Select Image</label>
+                    <span>{{fileName}}</span>
+                    <input type="file" id = "selectFile" hidden (change)="selectImage($event)" class="form-control"> 
+                </div>
                 <div class="col-md-12">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Deadline Date</mat-label>
-                        <input matInput [matDatepicker]="picker" >
+                        <input matInput formControlName="deadline" [matDatepicker]="picker" >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -35,7 +40,7 @@
                 <div class="col-md-12">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Description</mat-label>
-                        <textarea matInput  placeholder="task description ...."></textarea>
+                        <textarea matInput formControlName="description" placeholder="task description ...."></textarea>
                     </mat-form-field>
                     
                 </div>
@@ -44,9 +49,16 @@
 
     <footer class="tw-p-6">
         <div class="d-flex justify-content-center align-items-center">
-            <button mat-flat-button class="btn btn-success py-1 px-5 mx-2"  >Create</button>
+            <button *ngIf="!data" [disabled]="!this.newTaskForm.valid" mat-flat-button class="btn btn-success py-1 px-5 mx-2"  (click)="createTask()">Create</button>
+
+            <button *ngIf="data" [disabled]="this.copiedObject.title === this.newTaskForm.value.title &&
+                                             this.copiedObject.description === this.newTaskForm.value.description &&
+                                             this.copiedObject.image === this.newTaskForm.value.image &&
+                                             this.copiedObject.deadline === this.newTaskForm.value.deadline &&
+                                             this.copiedObject.userId === this.newTaskForm.value.userId"  
+            mat-flat-button class="btn btn-success py-1 px-5 mx-2"  (click)="updateTask()"  >Update</button>
          
-            <button mat-flat-button class="btn btn-danger py-1 px-5">Close</button>
+            <button mat-flat-button class="btn btn-danger py-1 px-5" (click)="close()">Close</button>
           </div>
         
       </footer>
