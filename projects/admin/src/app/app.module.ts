@@ -12,7 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { CoreModule } from './core/core.module';
 import { NgxPaginationModule } from 'ngx-pagination';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateDirective, TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 @NgModule({
@@ -38,7 +38,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
       }
-  })
+  }),
   ],
   providers: [],
   bootstrap: [AppComponent]
